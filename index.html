@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>漂泊之間：收容所規則下的困境</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    blockquote {
+      font-style: italic;
+      color: #555;
+      border-left: 4px solid #ccc;
+      padding-left: 1rem;
+      margin: 1rem 0;
+    }
+    .interactive {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: #eef5ff;
+      border-left: 5px solid #4682b4;
+      border-radius: 4px;
+    }
+    label, select {
+      display: block;
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>漂泊之間：收容所規則下的困境</h1>
+    <p>探索台灣無家者在制度夾縫中求生的故事</p>
+  </header>
+
+  <div class="container">
+    <p>「你現在是什麼狀況？」我問。<br>
+    他輕聲說：「就還是漂泊啊。」</p>
+
+    <blockquote>
+      收容所規定不能住太久，要你自己離開，進入下一階段。但那個「下一階段」，很多人根本達不到。
+    </blockquote>
+
+    <p>收容所很多時候也會要求入住者達到「無毒」、「無酒」的條件，這對某些人來說簡直是一道無法跨越的門檻。你要先變好，才能獲得幫助，但你若沒有幫助，又要怎麼變好？</p>
+
+    <div class="interactive">
+      <h3>如果你是無家者，你會選擇？</h3>
+      <label for="scenario">當收容所規定要「無酒、無毒」才能住進去時：</label>
+      <select id="scenario" onchange="showResponse()">
+        <option value="">-- 請選擇 --</option>
+        <option value="try">我會努力改變，試著進入制度內。</option>
+        <option value="reject">我可能會感到絕望，選擇放棄。</option>
+        <option value="seek">我會尋找其他非官方的庇護或社福資源。</option>
+      </select>
+      <div id="response" style="margin-top:1rem;"></div>
+    </div>
+
+    <p>這不是單一個案，而是一種反覆出現的現象：制度的好意，若缺乏彈性，便可能成為下一個困住人的牆。</p>
+  </div>
+
+  <footer>
+    製作：城市觀察報導小組｜2025
+  </footer>
+
+  <script>
+    function showResponse() {
+      const responseBox = document.getElementById('response');
+      const choice = document.getElementById('scenario').value;
+      let text = '';
+      switch (choice) {
+        case 'try':
+          text = '努力是一條路，但也需要支持與陪伴才能走得下去。';
+          break;
+        case 'reject':
+          text = '許多人在重複碰壁之後，選擇不再相信制度。';
+          break;
+        case 'seek':
+          text = '民間團體與友人網絡往往成為無家者的另一條生命線。';
+          break;
+        default:
+          text = '';
+      }
+      responseBox.innerHTML = text;
+    }
+  </script>
+</body>
+</html>
