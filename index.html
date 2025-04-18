@@ -1,108 +1,105 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>收容所規定與個人經驗互動網頁</title>
+  <meta charset="UTF-8">
+  <title>街友的抉擇路徑</title>
   <style>
     body {
-      font-family: "Helvetica Neue", sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
+      font-family: 'Noto Sans TC', sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    .node {
+      margin-bottom: 30px;
       padding: 20px;
+      border-left: 4px solid #555;
+      background-color: #fff;
+      border-radius: 8px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
     }
-    h1 {
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .question {
-      margin-bottom: 20px;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+    .node.active {
+      display: block;
     }
     button {
-      background-color: #4CAF50;
+      margin-top: 10px;
+      margin-right: 10px;
+      padding: 8px 16px;
+      background-color: #0066cc;
       color: white;
-      padding: 10px 20px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 16px;
     }
     button:hover {
-      background-color: #45a049;
+      background-color: #004d99;
     }
-    .response-box {
-      margin-top: 30px;
-    }
-    .response-box h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-    .response-box pre {
-      background: #eee;
-      padding: 15px;
-      border-radius: 8px;
-      white-space: pre-wrap;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>你的收容所生活經驗</h1>
-    <form id="surveyForm">
-      <div class="question">
-        <label for="q1">你當初為什麼會選擇進入收容所？是主動還是被安排？</label>
-        <textarea id="q1" name="q1"></textarea>
-      </div>
-      <div class="question">
-        <label for="q2">有哪些規定讓你覺得很難適應？可否舉例說明？</label>
-        <textarea id="q2" name="q2"></textarea>
-      </div>
-      <div class="question">
-        <label for="q3">你有試圖改變或反映過這些規定嗎？情況如何？</label>
-        <textarea id="q3" name="q3"></textarea>
-      </div>
-      <div class="question">
-        <label for="q4">你覺得這些規定幫助了你重建生活嗎？還是讓你更難離開街頭？</label>
-        <textarea id="q4" name="q4"></textarea>
-      </div>
-      <button type="button" onclick="handleSubmit()">提交</button>
-    </form>
-    <div class="response-box" id="responseBox" style="display: none;">
-      <h2>你的回饋：</h2>
-      <pre id="userResponses"></pre>
-    </div>
+
+  <h1>街友的選擇之路</h1>
+
+  <!-- 節點 A：進收容所嗎？ -->
+  <div class="node active" id="nodeA">
+    <p>你在街頭已經待了幾個月，現在社工建議你考慮進入收容所。你會怎麼做？</p>
+    <button onclick="showNode('nodeB')">我選擇進去</button>
+    <button onclick="showNode('nodeC')">我想繼續在外面</button>
+  </div>
+
+  <!-- 節點 B：面對規定 -->
+  <div class="node" id="nodeB">
+    <p>你剛進入收容所，發現每天有固定作息時間，早上6點起床、晚上10點熄燈，還不能帶手機。你覺得...</p>
+    <button onclick="showNode('nodeD')">我可以適應</button>
+    <button onclick="showNode('nodeE')">這樣太壓抑了</button>
+  </div>
+
+  <!-- 節點 C：在外遇困 -->
+  <div class="node" id="nodeC">
+    <p>你選擇繼續在外生活。冬天到了，氣溫驟降，你在便利商店前被驅趕多次。你現在...</p>
+    <button onclick="showNode('nodeB')">重新考慮收容所</button>
+    <button onclick="showNode('nodeF')">試著找其他管道幫助</button>
+  </div>
+
+  <!-- 節點 D：適應 -->
+  <div class="node" id="nodeD">
+    <p>你努力配合作息，開始參加庇護工場的清潔工作。生活慢慢有了規律。</p>
+    <button onclick="showNode('nodeG')">思考下一步：租屋或就業</button>
+  </div>
+
+  <!-- 節點 E：壓抑 -->
+  <div class="node" id="nodeE">
+    <p>你對規定感到不適應，常常熬夜滑手機，結果被館方警告。你現在...</p>
+    <button onclick="showNode('nodeH')">試著跟工作人員反映</button>
+    <button onclick="showNode('nodeC')">選擇離開收容所</button>
+  </div>
+
+  <!-- 更多節點... -->
+  <div class="node" id="nodeF">
+    <p>你找到一個教會提供臨時住宿，但無法穩定留宿。你開始思考更穩定的方式生活...</p>
+  </div>
+
+  <div class="node" id="nodeG">
+    <p>你和社工討論租屋補助，也開始參加職訓班，朝穩定生活邁進。</p>
+  </div>
+
+  <div class="node" id="nodeH">
+    <p>工作人員理解你的處境，協助你申請延長手機使用時間。你開始感受到制度內部也能有彈性。</p>
   </div>
 
   <script>
-    function handleSubmit() {
-      const q1 = document.getElementById('q1').value.trim();
-      const q2 = document.getElementById('q2').value.trim();
-      const q3 = document.getElementById('q3').value.trim();
-      const q4 = document.getElementById('q4').value.trim();
-
-      const responses = `1. 進入收容所的原因：\n${q1}\n\n` +
-                        `2. 難以適應的規定：\n${q2}\n\n` +
-                        `3. 有無反映與改變情況：\n${q3}\n\n` +
-                        `4. 收容規定帶來的影響：\n${q4}`;
-
-      document.getElementById('userResponses').textContent = responses;
-      document.getElementById('responseBox').style.display = 'block';
+    function showNode(nodeId) {
+      document.getElementById(nodeId).classList.add("active");
+      window.scrollTo({
+        top: document.getElementById(nodeId).offsetTop - 20,
+        behavior: 'smooth'
+      });
     }
   </script>
+
 </body>
 </html>
