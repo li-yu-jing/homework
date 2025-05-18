@@ -241,15 +241,25 @@
       document.getElementById('game').style.backgroundImage = scene.bg === '111111' ? 'none' : `url('${scene.bg}')`;
       document.getElementById('speech').innerText = scene.speech;
 
-      const choicesHtml = scene.choices.map(choice =>
-        `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
-      ).join('');
-      document.getElementById('choices').innerHTML = choicesHtml;
+      const gameContainer = document.getElementById('game');
 
-      if (scene.choices.length === 0) {
-        document.getElementById('choices').innerHTML = '<button class="btn" onclick="location.reload()">重新開始</button>';
-      }
+      gameContainer.onclick = null;
+
+      if (scene.choices.length > 0) {
+        const choicesHtml = scene.choices.map(choice =>
+        `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
+        ).join('');
+        document.getElementById('choices').innerHTML = choicesHtml;
+        } else {
+        document.getElementById('choices').innerHTML = '<div style="color: white; font-size: 14px;">（點擊畫面繼續）</div>';
+
+        if (scene.autoNext) {
+           gameContainer.onclick = () => goTo(scene.autoNext);
+         } else {
+           gameContainer.onclick = () => location.reload();
     }
+  }
+}
   </script>
 </body>
 </html>
