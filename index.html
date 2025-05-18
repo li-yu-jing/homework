@@ -28,6 +28,7 @@
       bottom: 40px;
       width: 100%;
       text-align: center;
+      z-index: 2;
     }
     .btn {
       margin: 10px;
@@ -96,6 +97,16 @@
       text-align: center;
       margin-bottom: 20px;
     }
+    #clickOverlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+      cursor: pointer;
+    }
     @keyframes fadeOut {
       to {
         opacity: 0;
@@ -126,6 +137,7 @@
     </div>
 
     <div class="end-screen" id="endScreen"></div>
+    <div id="clickOverlay"></div>
   </div>
 
   <script>
@@ -138,7 +150,7 @@
           { text: '趕快嘗試看看能不能適應新生活', next: 'aaa' }
         ]
       },
-     aaa: {
+      aaa: {
         bg: '111111',
         speech: '是否參加安置機構團康活動',
         choices: [
@@ -214,7 +226,7 @@
         bg: '111111',
         speech: '你決定自己嘗試出去找適合的工作，跑了幾家工地和搬運廠，但都沒錄取。',
         choices: [
-          { text: '決定回到機構', next: 'uuu' },
+          { text: '決定回到機構', next: 'uuu' }
         ]
       },
       uuu: {
@@ -223,12 +235,11 @@
         autoNext: 'zzz',
         choices: []
       },
-      zzz:{
+      zzz: {
         bg: '111111',
-        speech:'哈哈哈'
+        speech: '哈哈哈',
         choices: []
-      },
-
+      }
     };
 
     function startGame() {
@@ -238,28 +249,28 @@
 
     function goTo(key) {
       const scene = scenes[key];
-      document.getElementById('game').style.backgroundImage = scene.bg === '111111' ? 'none' : `url('${scene.bg}')`;
-      document.getElementById('speech').innerText = scene.speech;
+      const game = document.getElementById('game');
+      const speech = document.getElementById('speech');
+      const choices = document.getElementById('choices');
+      const overlay = document.getElementById('clickOverlay');
 
-      const gameContainer = document.getElementById('game');
-
-      gameContainer.onclick = null;
+      game.style.backgroundImage = scene.bg === '111111' ? 'none' : `url('${scene.bg}')`;
+      speech.innerText = scene.speech;
+      overlay.style.display = 'none';
+      overlay.onclick = null;
 
       if (scene.choices.length > 0) {
-        const choicesHtml = scene.choices.map(choice =>
-        `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
+        choices.innerHTML = scene.choices.map(choice =>
+          `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
         ).join('');
-        document.getElementById('choices').innerHTML = choicesHtml;
-        } else {
-        document.getElementById('choices').innerHTML = '<div style="color: white; font-size: 14px;">（點擊畫面繼續）</div>';
-
-        if (scene.autoNext) {
-           gameContainer.onclick = () => goTo(scene.autoNext);
-         } else {
-           gameContainer.onclick = () => location.reload();
+      } else {
+        choices.innerHTML = '<div style="color: white; font-size: 14px;">（點擊畫面繼續）</div>';
+        overlay.style.display = 'block';
+        overlay.onclick = () => {
+          goTo(scene.autoNext || 'start');
+        };
+      }
     }
-  }
-}
   </script>
 </body>
 </html>
