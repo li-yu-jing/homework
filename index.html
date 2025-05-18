@@ -142,8 +142,8 @@
         bg: '111111',
         speech: '是否參加安置機構團康活動',
         choices: [
-          { text: '不願參加，找理由推託', next: 'eee' },
-          { text: '勉強參加，但覺得無聊', next: 'fff' }
+          { text: '不願參加，找理由推託', next: 'ddd' },
+          { text: '勉強參加，但覺得無聊', next: 'ccc' }
         ]
       },
       bbb: {
@@ -158,10 +158,74 @@
         bg: '111111',
         speech: '生活輔導員強硬要求你參與活動',
         choices: [
-          { text: '草草應付參加活動', next: 'ccc' },
-          { text: '拒絕並表現不滿', next: 'ddd' }
+          { text: '強忍不滿參加', next: 'ccc' },
+          { text: '爆發衝突', next: 'ggg' }
         ]
       },
+      ccc: {
+        bg: '111111',
+        speech: '你發現機構中大家都有交友圈，你感到孤單⋯⋯',
+        choices: [
+          { text: '躲回原本的生活習慣', next: 'lll' },
+          { text: '試著融入他們', next: 'mmm' }
+        ]
+      },
+      ggg: {
+        bg: '111111',
+        speech: '你覺得機構的規範很嚴格，決定⋯⋯',
+        choices: [
+          { text: '受不了制度管束，決定離開', next: 'ccc' },
+          { text: '選擇留下❗ 計一點', next: 'jjj' }
+        ]
+      },
+      jjj: {
+        bg: '111111',
+        speech: '室友很煩，晚上不睡覺在房間抱怨社會',
+        choices: [
+          { text: '試圖溝通', next: 'mmm' },
+          { text: '逃避與人相處', next: 'lll' }
+        ]
+      },
+      lll: {
+        bg: '111111',
+        speech: '想喝酒解悶',
+        choices: [
+          { text: '偷喝一點', next: 'ppp' },
+          { text: '忍住', next: 'mmm' }
+        ]
+      },
+      ppp: {
+        bg: '111111',
+        speech: '想喝酒解悶',
+        choices: [
+          { text: '選擇留下 ❗ 計一點', next: 'mmm' },
+          { text: '受不了制度管束，主動決定離開', next: 'mmm' }
+        ]
+      },
+      mmm: {
+        bg: '111111',
+        speech: '社工邀你參加職場見習',
+        choices: [
+          { text: '拒絕參加，想自己去外面找工作', next: 'ttt' },
+          { text: '上課表現良好', next: 'uuu' }
+        ]
+      },
+      ttt: {
+        bg: '111111',
+        speech: '你決定自己嘗試出去找適合的工作，跑了幾家工地和搬運廠，但都沒錄取。',
+        choices: [
+          { text: '決定回到機構', next: 'uuu' },
+        ]
+      },
+      uuu: {
+        bg: '111111',
+        speech: '成為清潔工（機構內），你每天清掃不同樓層，雖然辛苦，還是撐了下來。',
+        choices: [
+          { text: '決定回到機構', next: '' },
+          { text: '上課表現良好', next: '' }
+        ]
+      },
+
     };
 
     function startGame() {
