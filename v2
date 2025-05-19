@@ -1,1 +1,330 @@
 
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>街友安置體驗</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .game-container {
+      width: 375px;
+      height: 667px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+    .content {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+    }
+    .btn {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      font-size: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    .speech-bubble {
+      position: absolute;
+      bottom: 200px;
+      left: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.9);
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      z-index: 2;
+    }
+    .start-screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+      animation: fadeIn 1s ease forwards;
+    }
+    .start-screen h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .start-screen .btn {
+      background-color: #4caf50;
+      color: white;
+    }
+    .end-screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: 4;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      animation: fadeIn 2s ease forwards;
+    }
+    .end-message {
+      background-color: rgba(0,0,0,0.6);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #clickOverlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+      cursor: pointer;
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container" id="game" style="background-image: url('社工關懷街頭無家者.png');">
+    <div class="speech-bubble" id="speech">社工：要不要入住安置機構？</div>
+    <div class="content" id="choices">
+      <button class="btn" onclick="goTo('accept')">入住機構<br>你會有個安身之處</button>
+      <button class="btn" onclick="goTo('decline')">不入住<br>你將繼續露宿街頭</button>
+    </div>
+
+    <div class="start-screen" id="startScreen">
+      <h1>街友安置體驗</h1>
+      <button class="btn" onclick="startGame()">開始遊戲</button>
+    </div>
+
+    <div class="end-screen" id="endScreen"></div>
+    <div id="clickOverlay"></div>
+  </div>
+
+  <script>
+    const scenes = {
+      accept: {
+        bg: '111111',
+        speech: '你剛被安置進這間機構，身上帶著簡單的行李，內心混雜著疲憊與戒心。這裡比街頭安全，卻讓你感到陌生。生活開始規律，日復一日，有點無聊。',
+        choices: [
+          { text: '決定先觀察一陣子，獨自在房間休息', next: 'bbb' },
+          { text: '趕快嘗試看看能不能適應新生活', next: 'aaa' }
+        ]
+      },
+      aaa: {
+        bg: '111111',
+        speech: '是否參加安置機構團康活動',
+        choices: [
+          { text: '不願參加，找理由推託', next: 'ddd' },
+          { text: '勉強參加，但覺得無聊', next: 'ccc' }
+        ]
+      },
+      bbb: {
+        bg: '111111',
+        speech: '生活輔導員發現你在團體活動時間躲在房間內⋯⋯',
+        choices: [
+          { text: '草草應付參加活動', next: 'ccc' },
+          { text: '拒絕並表現不滿', next: 'ddd' }
+        ]
+      },
+      ddd: {
+        bg: '111111',
+        speech: '生活輔導員強硬要求你參與活動',
+        choices: [
+          { text: '強忍不滿參加', next: 'ccc' },
+          { text: '爆發衝突', next: 'ggg' }
+        ]
+      },
+      ccc: {
+        bg: '111111',
+        speech: '你發現機構中大家都有交友圈，你感到孤單⋯⋯',
+        choices: [
+          { text: '躲回原本的生活習慣', next: 'lll' },
+          { text: '試著融入他們', next: 'mmm' }
+        ]
+      },
+      ggg: {
+        bg: '111111',
+        speech: '你覺得機構的規範很嚴格，決定⋯⋯',
+        choices: [
+          { text: '受不了制度管束，決定離開', next: 'ccc' },
+          { text: '選擇留下❗ 計一點', next: 'jjj' }
+        ]
+      },
+      jjj: {
+        bg: '111111',
+        speech: '室友很煩，晚上不睡覺在房間抱怨社會',
+        choices: [
+          { text: '試圖溝通', next: 'mmm' },
+          { text: '逃避與人相處', next: 'lll' }
+        ]
+      },
+      lll: {
+        bg: '111111',
+        speech: '想喝酒解悶',
+        choices: [
+          { text: '偷喝一點', next: 'ppp' },
+          { text: '忍住', next: 'mmm' }
+        ]
+      },
+      ppp: {
+        bg: '111111',
+        speech: '想喝酒解悶',
+        choices: [
+          { text: '選擇留下 ❗ 計一點', next: 'mmm' },
+          { text: '受不了制度管束，主動決定離開', next: 'mmm' }
+        ]
+      },
+      mmm: {
+        bg: '111111',
+        speech: '社工邀你參加職場見習',
+        choices: [
+          { text: '拒絕參加，想自己去外面找工作', next: 'ttt' },
+          { text: '上課表現良好', next: 'uuu' }
+        ]
+      },
+      ttt: {
+        bg: '111111',
+        speech: '你決定自己嘗試出去找適合的工作，跑了幾家工地和搬運廠，但都沒錄取。',
+        choices: [
+          { text: '決定回到機構', next: 'uuu' }
+        ]
+      },
+      uuu: {
+        bg: '111111',
+        speech: '成為清潔工（機構內），你每天清掃不同樓層，雖然辛苦，還是撐了下來。',
+        autoNext: 'zzz',
+        choices: []
+      },
+      zzz: {
+        bg: '111111',
+        speech: '你成功存到一筆錢，社工希望幫你開戶',
+        choices: [
+          { text: '拒絕', next: 'a1' }
+          { text: '配合開戶', next: 'a2' }
+        ]
+      },
+      a1: {
+        bg: '111111',
+        speech: '沒有銀行帳戶讓你難以管控錢，結果把錢花光',
+        autoNext: 'a2',
+        choices: []
+      },
+      a2: {
+        bg: '111111',
+        speech: '試著重建生活，努力戒除酒菸',
+        autoNext: 'a3',
+        choices: []
+      },
+      a3: {
+        bg: '111111',
+        speech: '你決定出去透透氣，買了杯飲料，在巷口走了一圈。',
+        choices: [
+          { text: '依約時間返回機構', next: 'a4' }
+          { text: '外出超過門禁時間', next: 'a5' }
+        ]
+      },
+      a4: {
+        bg: '111111',
+        speech: '社工依規定請你配合搜身，檢查是否有攜帶違禁品。',
+        choices: [
+          { text: '配合搜身', next: 'a6' }
+          { text: '拒絕配合', next: 'a7' }
+        ]
+      },
+      a6: {
+        bg: '111111',
+        speech: '慢慢的你存到一筆存款，足夠去外面租房。在社工的幫助下你找到機構外的工作，透過安置機構的輔助，恢復職能，重建自立生活。',
+        choices: []
+      },
+      a7: {
+        bg: '111111',
+        speech: '對於搜身，你決定⋯⋯',
+        choices: [
+          { text: '選擇留下❗ 計一點', next: 'a8' }
+          { text: '覺得受不了制度管束 ，選擇離開機構回到街頭', next: 'a9' }
+        ]
+      },
+      a5: {
+        bg: '111111',
+        speech: '由於外出超過門禁時間，你決定⋯⋯',
+        choices: [
+          { text: '選擇留下❗ 計一點', next: 'a8' }
+          { text: '覺得受不了制度管束 ，選擇離開機構回到街頭', next: 'a9' }
+        ]
+      },
+    };
+
+    function startGame() {
+      document.getElementById('startScreen').style.animation = 'fadeOut 1s ease forwards';
+      setTimeout(() => document.getElementById('startScreen').style.display = 'none', 1000);
+    }
+
+    function goTo(key) {
+      const scene = scenes[key];
+      const game = document.getElementById('game');
+      const speech = document.getElementById('speech');
+      const choices = document.getElementById('choices');
+      const overlay = document.getElementById('clickOverlay');
+
+      game.style.backgroundImage = scene.bg === '111111' ? 'none' : `url('${scene.bg}')`;
+      speech.innerText = scene.speech;
+      overlay.style.display = 'none';
+      overlay.onclick = null;
+
+      if (scene.choices.length > 0) {
+        choices.innerHTML = scene.choices.map(choice =>
+          `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
+        ).join('');
+      } else {
+        choices.innerHTML = '<div style="color: white; font-size: 14px;">（點擊畫面繼續）</div>';
+        overlay.style.display = 'block';
+        overlay.onclick = () => {
+          goTo(scene.autoNext || 'start');
+        };
+      }
+    }
+  </script>
+</body>
+</html>
+
