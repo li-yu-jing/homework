@@ -1,255 +1,150 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>街友安置體驗</title>
+  <meta charset="UTF-8">
+  <title>文字冒險遊戲</title>
   <style>
     body {
       margin: 0;
-      background-color: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'Noto Sans TC', sans-serif;
-    }
-    .game-container {
-      width: 375px;
-      height: 667px;
-      position: relative;
+      font-family: "Arial", sans-serif;
       background-size: cover;
       background-position: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      overflow: hidden;
+      color: white;
     }
-    .content {
-      position: absolute;
-      bottom: 40px;
-      width: 100%;
-      text-align: center;
-    }
-    .btn {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      font-size: 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-    }
-    .speech-bubble {
-      position: absolute;
-      bottom: 200px;
-      left: 20px;
-      right: 20px;
-      background: rgba(255,255,255,0.9);
-      padding: 10px 15px;
+    #game {
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      max-width: 800px;
+      margin: 5vh auto;
       border-radius: 10px;
-      font-weight: bold;
-      font-size: 16px;
-      z-index: 2;
     }
-    .start-screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: #111;
+    #speech {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .choice {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem 1rem;
+      background: #ffffff22;
+      border: none;
       color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 3;
-      animation: fadeIn 1s ease forwards;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
     }
-    .start-screen h1 {
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-    .start-screen .btn {
-      background-color: #4caf50;
-      color: white;
-    }
-    .end-screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: 4;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      animation: fadeIn 2s ease forwards;
-    }
-    .end-message {
-      background-color: rgba(0,0,0,0.6);
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      font-size: 22px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    .choice:hover {
+      background: #ffffff44;
     }
   </style>
 </head>
 <body>
-  <div class="game-container" id="game" style="background-image: url('社工關懷街頭無家者.png');">
-    <div class="speech-bubble" id="speech">社工：要不要入住安置機構？</div>
-    <div class="content" id="choices">
-      <button class="btn" onclick="goTo('accept')">入住機構<br>你會有個安身之處</button>
-      <button class="btn" onclick="goTo('decline')">不入住<br>你將繼續露宿街頭</button>
-    </div>
-
-    <div class="start-screen" id="startScreen">
-      <h1>街友安置體驗</h1>
-      <button class="btn" onclick="startGame()">開始遊戲</button>
-    </div>
-
-    <div class="end-screen" id="endScreen"></div>
+  <div id="game">
+    <div id="speech"></div>
+    <div id="choices"></div>
   </div>
 
   <script>
     const scenes = {
       accept: {
-        bg: '111111',
-        speech: '你剛被安置進這間機構，身上帶著簡單的行李，內心混雜著疲憊與戒心。這裡比街頭安全，卻讓你感到陌生。生活開始規律，日復一日，有點無聊。',
+        bg: 'day3.png',
+        speech: '第一次踏進安置機構，印入我眼簾的這棟雙層樓的老屋，鐵皮屋頂鏽蝕、牆面斑駁，但中庭寬闊，四周圍繞著寢室。',
+        autoNext: 'd1',
+        choices: [] 
+      },
+      d1: {
+        bg: 'day3.png',
+        speech: '房內擺滿雙層床，金屬床架沿牆排開，空間顯得擁擠而充滿生活感。這裡或許稱不上舒適，但至少給了許多和我一樣的街友一個棲身之所。',
+        autoNext: 'd2',
+        choices: []
+      },
+      d2: {
+        bg: 'day3.png',
+        speech: '對我來說，一切還很陌生，還不太知道該怎麼開始新的生活。',
         choices: [
           { text: '決定先觀察一陣子，獨自在房間休息', next: 'bbb' },
           { text: '趕快嘗試看看能不能適應新生活', next: 'aaa' }
         ]
       },
-     aaa: {
-        bg: '111111',
-        speech: '是否參加安置機構團康活動',
+      aaa: {
+        bg: '團康甩手功.png',
+        speech: '吃完早餐，社工公布今天的團康活動，全體住民都要參加手工藝課。',
+        autoNext: 'd3',
+        choices: []
+      },
+      d3: {
+        bg: '團康甩手功.png',
+        speech: '聽到社工的公告，有些老住民已經習慣的開始動作，我卻還坐在角落。',
+        autoNext: 'd4',
+        choices: []
+      },
+      d4: {
+        bg: '團康甩手功.png',
+        speech: '不清楚這些安排對我有沒有幫助，而且我還不太認識這邊的其他住民和生活輔導員⋯⋯',
         choices: [
           { text: '不願參加，找理由推託', next: 'ddd' },
           { text: '勉強參加，但覺得無聊', next: 'ccc' }
         ]
       },
       bbb: {
-        bg: '111111',
-        speech: '生活輔導員發現你在團體活動時間躲在房間內⋯⋯',
+        bg: 'day04.png',
+        speech: '早上的團體活動時間，住在街頭多年的我早就過慣了沒日沒夜的生活，只想躺著休息。',
+        autoNext: 'd5',
+        choices: []
+      },
+      d5: {
+        bg: 'day04.png',
+        speech: '但才剛躺下，生活輔導員就在門口催促我：「起來囉，要去打掃跟做早操了，每天早上都要，大家都得去。」',
+        autoNext: 'd6',
+        choices: []
+      },
+      d6: {
+        bg: 'day04.png',
+        speech: '我知道這是規定，但真的不太習慣這種被安排好的團體生活⋯⋯',
         choices: [
           { text: '草草應付參加活動', next: 'ccc' },
           { text: '拒絕並表現不滿', next: 'ddd' }
         ]
       },
       ddd: {
-        bg: '111111',
-        speech: '生活輔導員強硬要求你參與活動',
-        choices: [
-          { text: '強忍不滿參加', next: 'ccc' },
-          { text: '爆發衝突', next: 'ggg' }
-        ]
-      },
-      ccc: {
-        bg: '111111',
-        speech: '你發現機構中大家都有交友圈，你感到孤單⋯⋯',
-        choices: [
-          { text: '躲回原本的生活習慣', next: 'lll' },
-          { text: '試著融入他們', next: 'mmm' }
-        ]
-      },
-      ggg: {
-        bg: '111111',
-        speech: '你覺得機構的規範很嚴格，決定⋯⋯',
-        choices: [
-          { text: '受不了制度管束，決定離開', next: 'ccc' },
-          { text: '選擇留下❗ 計一點', next: 'jjj' }
-        ]
-      },
-      jjj: {
-        bg: '111111',
-        speech: '室友很煩，晚上不睡覺在房間抱怨社會',
-        choices: [
-          { text: '試圖溝通', next: 'mmm' },
-          { text: '逃避與人相處', next: 'lll' }
-        ]
-      },
-      lll: {
-        bg: '111111',
-        speech: '想喝酒解悶',
-        choices: [
-          { text: '偷喝一點', next: 'ppp' },
-          { text: '忍住', next: 'mmm' }
-        ]
-      },
-      ppp: {
-        bg: '111111',
-        speech: '想喝酒解悶',
-        choices: [
-          { text: '選擇留下 ❗ 計一點', next: 'mmm' },
-          { text: '受不了制度管束，主動決定離開', next: 'mmm' }
-        ]
-      },
-      mmm: {
-        bg: '111111',
-        speech: '社工邀你參加職場見習',
-        choices: [
-          { text: '拒絕參加，想自己去外面找工作', next: 'ttt' },
-          { text: '上課表現良好', next: 'uuu' }
-        ]
-      },
-      ttt: {
-        bg: '111111',
-        speech: '你決定自己嘗試出去找適合的工作，跑了幾家工地和搬運廠，但都沒錄取。',
-        choices: [
-          { text: '決定回到機構', next: 'uuu' },
-        ]
-      },
-      uuu: {
-        bg: '111111',
-        speech: '成為清潔工（機構內），你每天清掃不同樓層，雖然辛苦，還是撐了下來。',
-        autoNext: 'zzz',
+        bg: '強制參加團康活動.png',
+        speech: '生活輔導員擋在活動室門口，他看起來還年輕氣盛，語氣強硬：',
+        autoNext: 'd7',
         choices: []
       },
-      zzz:{
-        bg: '111111',
-        speech:'哈哈哈'
+      d7: {
+        bg: '強制參加團康活動.png',
+        speech: '「規定就是規定，每個人都要參加團康活動。」',
+        autoNext: 'd8',
         choices: []
-      },
-
+      }
     };
 
-    function startGame() {
-      document.getElementById('startScreen').style.animation = 'fadeOut 1s ease forwards';
-      setTimeout(() => document.getElementById('startScreen').style.display = 'none', 1000);
-    }
+    let current = 'accept';
 
-    function goTo(key) {
+    function showScene(key) {
       const scene = scenes[key];
-      document.getElementById('game').style.backgroundImage = scene.bg === '111111' ? 'none' : `url('${scene.bg}')`;
-      document.getElementById('speech').innerText = scene.speech;
+      current = key;
+      document.body.style.backgroundImage = `url('${scene.bg}')`;
+      document.getElementById('speech').textContent = scene.speech;
 
-      const choicesHtml = scene.choices.map(choice =>
-        `<button class="btn" onclick="goTo('${choice.next}')">${choice.text}</button>`
-      ).join('');
-      document.getElementById('choices').innerHTML = choicesHtml;
+      const choicesDiv = document.getElementById('choices');
+      choicesDiv.innerHTML = '';
 
-      if (scene.choices.length === 0) {
-        document.getElementById('choices').innerHTML = '<button class="btn" onclick="location.reload()">重新開始</button>';
+      if (scene.choices && scene.choices.length > 0) {
+        scene.choices.forEach(choice => {
+          const btn = document.createElement('button');
+          btn.className = 'choice';
+          btn.textContent = choice.text;
+          btn.onclick = () => showScene(choice.next);
+          choicesDiv.appendChild(btn);
+        });
+      } else if (scene.autoNext) {
+        setTimeout(() => showScene(scene.autoNext), 2000);
       }
     }
+
+    showScene(current);
   </script>
 </body>
 </html>
